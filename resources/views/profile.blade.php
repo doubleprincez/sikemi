@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container">
-        <img src="/uploads/avatars/{{ $user->avatar }}" alt="avatar" style="width: 150px; height: 150px; float: left; border-radius: 50%; margin-right: 25px;">
+        <img src="/uploads/avatars/{{ $user->avatar }}" alt="avatar"
+             style="width: 150px; height: 150px; float: left; border-radius: 50%; margin-right: 25px;">
         <h2>{{ $user->name }}'s Profile</h2>
         <form enctype="multipart/form-data" action="/profile" method="POST">
             <label for="">Update Profile Image</label>
@@ -11,5 +12,5 @@
             <input type="submit" class="btn btn-sm btn-primary" value="Upload Image">
         </form>
     </div>
-    
+
 @endsection

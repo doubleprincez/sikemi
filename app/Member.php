@@ -20,13 +20,18 @@ class Member extends Model
         'gender', 'occupation', 'position', 'department', 'datejoined', 'previouschurch',
     ];
 
-    public function roles() {
+    public function roles()
+    {
         return $this->hasMany('App\Role');
     }
-    public function incomes() {
+
+    public function incomes()
+    {
         return $this->hasMany('App\Income');
     }
-    public function departments() {
+
+    public function departments()
+    {
         return $this->belongsToMany('App\Department');
     }
 
@@ -34,12 +39,13 @@ class Member extends Model
     {
         if ($q == null) return $query;
         return $query
-                ->where('name', 'LIKE', "%{$q}%")
-                ->orWhere('department', 'LIKE', "%{$q}%")
-                ->orWhere('position', 'LIKE', "%{$q}%");
+            ->where('name', 'LIKE', "%{$q}%")
+            ->orWhere('department', 'LIKE', "%{$q}%")
+            ->orWhere('position', 'LIKE', "%{$q}%");
     }
 
-    public function addedMembers() {
+    public function addedMembers()
+    {
         return $this->belongsToMany(Member::class, 'members');
     }
 

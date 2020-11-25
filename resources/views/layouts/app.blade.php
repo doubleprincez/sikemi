@@ -12,13 +12,15 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    @laravelPWA
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+
 </head>
 <body>
     <div id="app">
@@ -74,6 +76,20 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <script type="text/javascript">
+            // Initialize the service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/serviceworker.js', {
+                    scope: '.'
+                }).then(function (registration) {
+                    // Registration was successful
+                    console.log({{ config('app.name', 'Church Administration') }}' ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log( {{ config('app.name', 'Church Administration') }}' ServiceWorker registration failed: ', err);
+                });
+            }
+        </script>
     </div>
 </body>
 </html>

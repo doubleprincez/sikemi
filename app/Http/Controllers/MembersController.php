@@ -41,13 +41,17 @@ class MembersController extends Controller
      */
     public function create()
     {
-        return view('members.create');
+        if (auth()->guard('admin')) {
+            return view('members.create');
+        } else {
+            return redirect()->back()->with(['error' => 'Only admins can add new members']);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,7 +73,7 @@ class MembersController extends Controller
         ]);
 
         //Handle File Upload
-        if($request->hasFile('member_image')){
+        if ($request->hasFile('member_image')) {
             // Get filename with the extension
             $fileNameWithExt = $request->file('member_image')->getClientOriginalName();
             // Get just filename
@@ -77,7 +81,7 @@ class MembersController extends Controller
             // Get just Extension
             $extension = $request->file('member_image')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload Image
             $path = $request->file('member_image')->storeAs('public/member_images', $fileNameToStore);
         }
@@ -106,7 +110,7 @@ class MembersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -118,7 +122,7 @@ class MembersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -130,8 +134,8 @@ class MembersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -153,7 +157,7 @@ class MembersController extends Controller
         ]);
 
         //Handle File Upload
-        if($request->hasFile('member_image')){
+        if ($request->hasFile('member_image')) {
             // Get filename with the extension
             $fileNameWithExt = $request->file('member_image')->getClientOriginalName();
             // Get just filename
@@ -161,7 +165,7 @@ class MembersController extends Controller
             // Get just Extension
             $extension = $request->file('member_image')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload Image
             $path = $request->file('member_image')->storeAs('public/member_images', $fileNameToStore);
         }
@@ -190,7 +194,7 @@ class MembersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -199,16 +203,18 @@ class MembersController extends Controller
         $member->delete();
         return redirect('/members')->with('success', 'Member Removed');
     }
-    
-    public function importFile() {
+
+    public function importFile()
+    {
         return view('imports.excel');
     }
 
-    public function importExcel(Request $request) {
+    public function importExcel(Request $request)
+    {
         $this->validate($request, [
             'select_file' => 'required|mimes:xls,xlsx,csv,'
         ]);
-        
+
         Excel::import(new MembersImport, request()->file('select_file'));
         return redirect('/members')->with('success', 'Bulk Members Added');
     }

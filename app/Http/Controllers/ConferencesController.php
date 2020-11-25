@@ -25,13 +25,17 @@ class ConferencesController extends Controller
      */
     public function create()
     {
-        return view('conferences.create');
+        if (auth()->guard('admin')) {
+            return view('conferences.create');
+        } else {
+            return redirect()->back()->with(['error' => 'Only Admins can create conferences']);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -46,7 +50,7 @@ class ConferencesController extends Controller
             'cover_image' => 'image|required|max:1999'
         ]);
         //Handle File Upload
-        if($request->hasFile('cover_image')){
+        if ($request->hasFile('cover_image')) {
             // Get filename with the extension
             $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
             // Get just filename
@@ -54,7 +58,7 @@ class ConferencesController extends Controller
             // Get just Extension
             $extension = $request->file('cover_image')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload Image
             $path = $request->file('cover_image')->storeAs('public/eventcover_images', $fileNameToStore);
         }
@@ -76,7 +80,7 @@ class ConferencesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,7 +91,7 @@ class ConferencesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -99,8 +103,8 @@ class ConferencesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -115,7 +119,7 @@ class ConferencesController extends Controller
             'cover_image' => 'image|required|max:1999'
         ]);
         //Handle File Upload
-        if($request->hasFile('cover_image')){
+        if ($request->hasFile('cover_image')) {
             // Get filename with the extension
             $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
             // Get just filename
@@ -123,7 +127,7 @@ class ConferencesController extends Controller
             // Get just Extension
             $extension = $request->file('cover_image')->getClientOriginalExtension();
             //Filename to store
-            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
             // Upload Image
             $path = $request->file('cover_image')->storeAs('public/eventcover_images', $fileNameToStore);
         }
@@ -145,7 +149,7 @@ class ConferencesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

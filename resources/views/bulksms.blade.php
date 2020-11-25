@@ -3,7 +3,6 @@
 @section('content')
     <form action='' method='post'>
     @csrf
-
     <label>Phone numbers (seperate with a comma [,])</label>
     <input type='text' name='numbers' />
 

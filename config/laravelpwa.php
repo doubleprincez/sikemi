@@ -3,7 +3,7 @@
 return [
     'name' => 'LaravelPWA',
     'manifest' => [
-        'name' => env('APP_NAME', 'My PWA App'),
+        'name' => env('APP_NAME', 'Church Administration System'),
         'short_name' => 'Church',
         'start_url' => '/',
         'background_color' => '#ffffff',
